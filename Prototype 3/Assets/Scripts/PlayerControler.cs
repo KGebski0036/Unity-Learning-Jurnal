@@ -7,6 +7,7 @@ public class PlayerControler : MonoBehaviour
     private Rigidbody playerRigidBody;
 
     private float strengthOfJump = 10;
+    private bool isOnGround = false;
     void Start()
     {
         playerRigidBody = GetComponent<Rigidbody>();
@@ -15,9 +16,15 @@ public class PlayerControler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && isOnGround)
         {
             playerRigidBody.AddForce(Vector3.up * strengthOfJump, ForceMode.Impulse);
+            isOnGround = false;
         }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        isOnGround = true;
     }
 }
