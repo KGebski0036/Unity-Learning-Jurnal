@@ -5,18 +5,51 @@ using UnityEngine;
 public class SpawnEnemy : MonoBehaviour
 {
     public GameObject enemyPrefab;
+    public GameObject powerupPrefab;
+
     private float mapSize = 9;
-    void Start()
+
+    private int countEnemy;
+    private int enemyInNextWave = 2;
+
+    private void Update()
     {
-        SpawnRandomEnemy();
+        countEnemy = FindObjectsOfType<Enemy>().Length;
+
+        if (countEnemy <= 0)
+        {
+            SpawnWave(enemyInNextWave);
+            enemyInNextWave++;
+        }
     }
 
-    void SpawnRandomEnemy()
+    private void SpawnWave(int numberOfEnemys)
+    {
+        for (int i = 0; i < numberOfEnemys; i++)
+        {
+            SpawnRandomEnemy(RandomPosition());
+            if (i % 3 == 1)
+            {
+                SpawnRandomPowerUp(RandomPosition());
+            }
+        }
+    }
+
+    private void SpawnRandomPowerUp(Vector3 randomPosition)
+    {
+        Instantiate(powerupPrefab, randomPosition, enemyPrefab.transform.rotation);
+    }
+
+    private void SpawnRandomEnemy(Vector3 randomPosition)
+    {
+        Instantiate(enemyPrefab, randomPosition, enemyPrefab.transform.rotation);
+    }
+
+    Vector3 RandomPosition()
     {
         float randomValueX = Random.Range(-mapSize, mapSize);
         float randomValueZ = Random.Range(-mapSize, mapSize);
 
-        Vector3 randomPosition = new Vector3(randomValueX, 0, randomValueZ);
-        Instantiate(enemyPrefab, randomPosition, enemyPrefab.transform.rotation);
+        return new Vector3(randomValueX, 0, randomValueZ);
     }
 }

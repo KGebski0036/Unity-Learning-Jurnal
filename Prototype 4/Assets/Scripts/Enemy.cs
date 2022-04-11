@@ -18,5 +18,10 @@ public class Enemy : MonoBehaviour
     {
         Vector3 vectorToPlayerLocation = (player.transform.position - transform.position).normalized;
         rigidbody.AddForce(vectorToPlayerLocation * speed * Time.deltaTime);
+
+        if (transform.position.y < -10)
+        {
+            Destroy(gameObject);
+        }
     }
 }
